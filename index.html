@@ -53,7 +53,6 @@
     .loader-logo {
       font-size: 2rem;
       color: var(--accent2);
-      font-family: 'Minecraftia', sans-serif;
       animation: pulseGlow 1.5s infinite ease-in-out;
       text-shadow: 0 0 10px var(--accent2), 0 0 30px var(--accent2);
     }
@@ -62,7 +61,6 @@
       margin-top: 10px;
       color: var(--accent);
       font-size: 1.2rem;
-      font-family: 'Minecraftia', sans-serif;
       text-shadow: 0 0 6px var(--accent);
       animation: pulse 1s infinite ease-in-out;
     }
@@ -123,7 +121,6 @@
       transition: 0.3s;
       text-shadow: 0 0 6px var(--accent);
       cursor: pointer;
-      font-family: 'Minecraftia', sans-serif;
     }
 
     .youtube-btn {
@@ -166,7 +163,6 @@
       color: var(--accent);
       text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
       animation: float 2s infinite ease-in-out;
-      font-family: 'Minecraftia', sans-serif;
     }
 
     .subtitle {
@@ -211,7 +207,6 @@
       border: 2px solid var(--accent2);
       color: var(--accent2);
       text-shadow: 0 0 6px var(--accent2);
-      background: transparent;
       transition: 0.3s ease;
     }
 
@@ -219,9 +214,85 @@
     .skill-badge:hover:nth-child(4n+2) { background: var(--hover2); color: #000; box-shadow: 0 0 15px var(--hover2); }
     .skill-badge:hover:nth-child(4n+3) { background: var(--hover3); color: #000; box-shadow: 0 0 15px var(--hover3); }
     .skill-badge:hover:nth-child(4n+4) { background: var(--hover4); color: #000; box-shadow: 0 0 15px var(--hover4); }
+
+    .project-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .project-card {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--accent2);
+      transition: 0.3s;
+    }
+
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: 0.5s ease;
+    }
+
+    .project-info {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      opacity: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      text-align: center;
+      transition: 0.5s ease;
+    }
+
+    .project-card:hover img {
+      transform: scale(1.1);
+      filter: blur(2px);
+    }
+
+    .project-card:hover .project-info {
+      opacity: 1;
+    }
+
+    form {
+      margin-top: 1rem;
+    }
+
+    input, textarea {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+      background: #111;
+      color: var(--text-color);
+      font-family: 'Minecraftia', sans-serif;
+    }
+
+    button {
+      background: var(--accent2);
+      color: black;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent2);
+    }
   </style>
 </head>
 <body>
+
   <div id="loader">
     <div class="loader-logo">SoulMalik.dev</div>
     <p id="loading-text">Loading...</p>
@@ -241,12 +312,12 @@
     <div class="subtitle">Minecraft Server Developer • 6+ Years Experience</div>
   </div>
 
-  <div class="section" id="about">
+  <div class="section show">
     <h2>About Me</h2>
     <p>🎮 <strong>6 Years of Minecraft Mastery</strong> — from casual survival setups to professional-grade tournament servers.<br><br>💻 <strong>5 Years of Plugin Development</strong> — Skript automation, custom loot, events, dungeons, and performance-focused configs.</p>
   </div>
 
-  <div class="section" id="skills">
+  <div class="section show" id="skills">
     <h2>Skills</h2>
     <div class="skills">
       <div class="skill-badge">Skript</div>
@@ -268,13 +339,38 @@
     </div>
   </div>
 
-  <div class="section" id="projects">
-    <h2>Projects</h2>
-    <p>🚧 Projects are currently under maintenance. Stay tuned for big reveals soon!</p>
+  <div class="section show" id="projects">
+    <h2>Latest Projects</h2>
+    <div class="project-grid">
+      <div class="project-card">
+        <img src="https://ik.imagekit.io/4e5uou2yov/max.png?updatedAt=1750607285910" alt="Max Tournament">
+        <div class="project-info">
+          <h3>Max Tournament</h3>
+          <p>A Minecraft Battle Royale tournament organized by me and @ReOul. Over 70 players participated within 5 days of announcement.</p>
+        </div>
+      </div>
+      <div class="project-card">
+        <img src="https://ik.imagekit.io/4e5uou2yov/max.png?updatedAt=1750607285910" alt="MaxaraMC">
+        <div class="project-info">
+          <h3>MaxaraMC</h3>
+          <p>A Minecraft Network/Server founded by me and @ReOul.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section show" id="contact">
+    <h2>Contact Me</h2>
+    <p>Email me at: <strong>asjidmalik51@gmail.com</strong></p>
+    <form action="https://formsubmit.co/asjidmalik51@gmail.com" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required><br><br>
+      <input type="email" name="email" placeholder="Your Email" required><br><br>
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea><br><br>
+      <button type="submit">Send Message</button>
+    </form>
   </div>
 
   <script>
-    // Loader Message
     const messages = [
       "Loading Chunks…", "Spawning Mobs…", "Building Terrain…",
       "Locating Stronghold…", "Enchanting Tools…", "Rendering Skybox…"
@@ -282,12 +378,10 @@
     document.getElementById("loading-text").innerText =
       messages[Math.floor(Math.random() * messages.length)];
 
-    // Animate progress bar
     setTimeout(() => {
       document.getElementById("progress").style.width = "100%";
     }, 100);
 
-    // Delay loader 2.5s once per session
     document.addEventListener("DOMContentLoaded", () => {
       const loader = document.getElementById("loader");
       if (sessionStorage.getItem("loadedBefore")) {
@@ -305,15 +399,6 @@
       }
     });
 
-    // Scroll reveal
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('show');
-      });
-    }, { threshold: 0.2 });
-    document.querySelectorAll('.section').forEach(el => observer.observe(el));
-
-    // Particles Background
     const canvas = document.getElementById("bg");
     const ctx = canvas.getContext("2d");
     let w, h, particles = [];
