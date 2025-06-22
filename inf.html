@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoulMalik | Minecraft Server Developer</title>
+  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #000;
+      --text-color: #fff;
+      --accent: #0ff;
+      --accent2: #f0f;
+      --youtube: #ff0000;
+      --darkmode: #9933ff;
+      --hover1: #ff00cc;
+      --hover2: #00ffcc;
+      --hover3: #ffff00;
+      --hover4: #00ffff;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-color);
+      font-family: 'Minecraftia', sans-serif;
+      color: var(--text-color);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    .loader-logo {
+      font-size: 2rem;
+      color: var(--accent2);
+      font-family: 'Minecraftia', sans-serif;
+      animation: pulseGlow 1.5s infinite ease-in-out;
+      text-shadow: 0 0 10px var(--accent2), 0 0 30px var(--accent2);
+    }
+
+    #loader p {
+      margin-top: 10px;
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-family: 'Minecraftia', sans-serif;
+      text-shadow: 0 0 6px var(--accent);
+      animation: pulse 1s infinite ease-in-out;
+    }
+
+    .progress-bar {
+      width: 80%;
+      height: 10px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: 0 0 5px #0ff;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: width 2.5s ease;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 10px var(--accent2), 0 0 30px var(--accent2);
+      }
+      50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 20px var(--accent2), 0 0 50px var(--accent2);
+      }
+    }
+
+    .top-right-buttons {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .top-right-buttons a,
+    .top-right-buttons button {
+      padding: 10px 16px;
+      border-radius: 50px;
+      background-color: #111;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid var(--accent);
+      transition: 0.3s;
+      text-shadow: 0 0 6px var(--accent);
+      cursor: pointer;
+      font-family: 'Minecraftia', sans-serif;
+    }
+
+    .youtube-btn {
+      color: var(--youtube);
+      border-color: var(--youtube);
+      text-shadow: 0 0 6px var(--youtube);
+    }
+
+    .youtube-btn:hover {
+      background-color: var(--youtube);
+      color: #000;
+      box-shadow: 0 0 10px var(--youtube), 0 0 25px var(--youtube);
+    }
+
+    .dark-btn {
+      color: var(--darkmode);
+      border-color: var(--darkmode);
+      text-shadow: 0 0 6px var(--darkmode);
+    }
+
+    .dark-btn:hover {
+      background-color: var(--darkmode);
+      color: #000;
+      box-shadow: 0 0 10px var(--darkmode), 0 0 25px var(--darkmode);
+    }
+
+    .container {
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+      animation: float 2s infinite ease-in-out;
+      font-family: 'Minecraftia', sans-serif;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: var(--accent2);
+      margin-top: 10px;
+      text-shadow: 0 0 5px var(--accent2);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .section {
+      padding: 50px 20px;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: 1s all ease;
+    }
+
+    .section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .skill-badge {
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      border: 2px solid var(--accent2);
+      color: var(--accent2);
+      text-shadow: 0 0 6px var(--accent2);
+      background: transparent;
+      transition: 0.3s ease;
+    }
+
+    .skill-badge:hover:nth-child(4n+1) { background: var(--hover1); color: #000; box-shadow: 0 0 15px var(--hover1); }
+    .skill-badge:hover:nth-child(4n+2) { background: var(--hover2); color: #000; box-shadow: 0 0 15px var(--hover2); }
+    .skill-badge:hover:nth-child(4n+3) { background: var(--hover3); color: #000; box-shadow: 0 0 15px var(--hover3); }
+    .skill-badge:hover:nth-child(4n+4) { background: var(--hover4); color: #000; box-shadow: 0 0 15px var(--hover4); }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-logo">SoulMalik.dev</div>
+    <p id="loading-text">Loading...</p>
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+  </div>
+
+  <canvas id="bg"></canvas>
+
+  <div class="top-right-buttons">
+    <a href="https://client.maxaranodes.com/" target="_blank">MaxaraNodes</a>
+    <a href="https://www.youtube.com/@SoulMalik69" target="_blank" class="youtube-btn">YouTube</a>
+    <button class="dark-btn" onclick="document.body.classList.toggle('dark')">Dark Mode</button>
+  </div>
+
+  <div class="container">
+    <h1>SoulMalik</h1>
+    <div class="subtitle">Minecraft Server Developer • 6+ Years Experience</div>
+  </div>
+
+  <div class="section" id="about">
+    <h2>About Me</h2>
+    <p>🎮 <strong>6 Years of Minecraft Mastery</strong> — from casual survival setups to professional-grade tournament servers.<br><br>💻 <strong>5 Years of Plugin Development</strong> — Skript automation, custom loot, events, dungeons, and performance-focused configs.</p>
+  </div>
+
+  <div class="section" id="skills">
+    <h2>Skills</h2>
+    <div class="skills">
+      <div class="skill-badge">Skript</div>
+      <div class="skill-badge">Paper</div>
+      <div class="skill-badge">Spigot</div>
+      <div class="skill-badge">Multiverse-Core</div>
+      <div class="skill-badge">LuckPerms</div>
+      <div class="skill-badge">DeluxeMenus</div>
+      <div class="skill-badge">EconomyShopGUI</div>
+      <div class="skill-badge">EssentialsX</div>
+      <div class="skill-badge">MythicMobs</div>
+      <div class="skill-badge">Quests</div>
+      <div class="skill-badge">ExcellentCrates</div>
+      <div class="skill-badge">AJLeaderboards</div>
+      <div class="skill-badge">Custom Items</div>
+      <div class="skill-badge">PvPManager</div>
+      <div class="skill-badge">Citizens</div>
+      <div class="skill-badge">Custom Events</div>
+    </div>
+  </div>
+
+  <div class="section" id="projects">
+    <h2>Projects</h2>
+    <p>🚧 Projects are currently under maintenance. Stay tuned for big reveals soon!</p>
+  </div>
+
+  <script>
+    // Loader Message
+    const messages = [
+      "Loading Chunks…", "Spawning Mobs…", "Building Terrain…",
+      "Locating Stronghold…", "Enchanting Tools…", "Rendering Skybox…"
+    ];
+    document.getElementById("loading-text").innerText =
+      messages[Math.floor(Math.random() * messages.length)];
+
+    // Animate progress bar
+    setTimeout(() => {
+      document.getElementById("progress").style.width = "100%";
+    }, 100);
+
+    // Delay loader 2.5s once per session
+    document.addEventListener("DOMContentLoaded", () => {
+      const loader = document.getElementById("loader");
+      if (sessionStorage.getItem("loadedBefore")) {
+        loader.style.display = "none";
+      } else {
+        const start = Date.now();
+        window.addEventListener("load", () => {
+          const elapsed = Date.now() - start;
+          const delay = Math.max(2500 - elapsed, 0);
+          setTimeout(() => {
+            loader.style.display = "none";
+            sessionStorage.setItem("loadedBefore", "true");
+          }, delay);
+        });
+      }
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('show');
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.section').forEach(el => observer.observe(el));
+
+    // Particles Background
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    let w, h, particles = [];
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+        this.vx = (Math.random() - 0.5) * 1.5;
+        this.vy = (Math.random() - 0.5) * 1.5;
+        this.size = Math.random() * 2 + 0.5;
+        this.color = "rgba(0,255,255,0.5)";
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+      update(mouse) {
+        const dx = this.x - mouse.x, dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          this.vx += dx / dist * 0.05;
+          this.vy += dy / dist * 0.05;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+        this.vx *= 0.95; this.vy *= 0.95;
+        this.draw();
+      }
+    }
+
+    const mouse = { x: w / 2, y: h / 2 };
+    window.addEventListener("mousemove", e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    for (let i = 0; i < 250; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => p.update(mouse));
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
