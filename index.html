@@ -3,458 +3,361 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SoulMalik | Minecraft Server Developer</title>
-  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
-
+  <title>SoulMalik | Minecraft Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #000;
-      --text-color: #fff;
-      --accent: #0ff;
-      --accent2: #f0f;
-      --youtube: #ff0000;
-      --darkmode: #9933ff;
-      --hover1: #ff00cc;
-      --hover2: #00ffcc;
-      --hover3: #ffff00;
-      --hover4: #00ffff;
+      --bg: #0e0e0e;
+      --text: #ffffff;
+      --accent: #00ffe7;
+      --neon: #00f0ff;
+      --card: #161616;
     }
+    body.dark {
+      --bg: #ffffff;
+      --text: #000000;
+      --accent: #0077ff;
+      --neon: #0077ff;
+      --card: #f1f1f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg-color);
-      font-family: 'Minecraftia', sans-serif;
-      color: var(--text-color);
-      overflow-x: hidden;
+      font-family: 'Orbitron', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       scroll-behavior: smooth;
+      transition: 0.4s ease;
     }
 
-    canvas {
-      position: fixed;
+    header, section, footer {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    nav {
+      position: sticky;
       top: 0;
-      left: 0;
-      z-index: 0;
+      background: #000000aa;
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      z-index: 100;
+      text-align: center;
     }
 
-    #loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 9999;
-    }
-
-    .loader-logo {
-      font-size: 2rem;
-      color: var(--accent2);
-      animation: pulseGlow 1.5s infinite ease-in-out;
-      text-shadow: 0 0 10px var(--accent2), 0 0 30px var(--accent2);
-    }
-
-    #loader p {
-      margin-top: 10px;
+    nav a {
       color: var(--accent);
-      font-size: 1.2rem;
-      text-shadow: 0 0 6px var(--accent);
-      animation: pulse 1s infinite ease-in-out;
-    }
-
-    .progress-bar {
-      width: 80%;
-      height: 10px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 20px;
-      box-shadow: 0 0 5px #0ff;
-    }
-
-    .progress {
-      width: 0%;
-      height: 100%;
-      background: var(--accent);
-      transition: width 2.5s ease;
-      box-shadow: 0 0 10px var(--accent);
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% {
-        transform: scale(1);
-        text-shadow: 0 0 10px var(--accent2), 0 0 30px var(--accent2);
-      }
-      50% {
-        transform: scale(1.05);
-        text-shadow: 0 0 20px var(--accent2), 0 0 50px var(--accent2);
-      }
-    }
-
-    .top-right-buttons {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 2;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .top-right-buttons a,
-    .top-right-buttons button {
-      padding: 10px 16px;
-      border-radius: 50px;
-      background-color: #111;
-      color: var(--accent);
+      margin: 0 15px;
       text-decoration: none;
       font-weight: bold;
-      border: 2px solid var(--accent);
       transition: 0.3s;
+    }
+
+    nav a:hover {
       text-shadow: 0 0 6px var(--accent);
+    }
+
+    .dark-toggle {
+      float: right;
+      margin-right: 10px;
       cursor: pointer;
-    }
-
-    .youtube-btn {
-      color: var(--youtube);
-      border-color: var(--youtube);
-      text-shadow: 0 0 6px var(--youtube);
-    }
-
-    .youtube-btn:hover {
-      background-color: var(--youtube);
-      color: #000;
-      box-shadow: 0 0 10px var(--youtube), 0 0 25px var(--youtube);
-    }
-
-    .dark-btn {
-      color: var(--darkmode);
-      border-color: var(--darkmode);
-      text-shadow: 0 0 6px var(--darkmode);
-    }
-
-    .dark-btn:hover {
-      background-color: var(--darkmode);
-      color: #000;
-      box-shadow: 0 0 10px var(--darkmode), 0 0 25px var(--darkmode);
-    }
-
-    .container {
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 20px;
-    }
-
-    h1 {
-      font-size: 3rem;
       color: var(--accent);
-      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
-      animation: float 2s infinite ease-in-out;
+      font-weight: bold;
     }
 
-    .subtitle {
-      font-size: 1.3rem;
-      color: var(--accent2);
-      margin-top: 10px;
-      text-shadow: 0 0 5px var(--accent2);
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    .section {
-      padding: 50px 20px;
+    h1, h2 {
+      color: var(--accent);
+      margin-bottom: 15px;
       text-align: center;
-      max-width: 900px;
-      margin: auto;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: 1s all ease;
     }
 
-    .section.show {
-      opacity: 1;
-      transform: translateY(0);
+    p {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--text);
     }
 
-    .skills {
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 30px;
+      margin-top: 30px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.05);
+      animation: fadeIn 1s ease;
+    }
+
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .skill {
+      padding: 10px 20px;
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .skill:hover {
+      background: var(--accent);
+      color: #000;
+      cursor: default;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .project {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .project img {
+      width: 100%;
+      border: 2px solid var(--accent);
+    }
+
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      width: 100%;
+      padding: 15px;
+      font-size: 0.9rem;
+    }
+
+    .tools {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 15px;
-      margin-top: 20px;
     }
 
-    .skill-badge {
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-weight: bold;
-      border: 2px solid var(--accent2);
-      color: var(--accent2);
-      text-shadow: 0 0 6px var(--accent2);
-      transition: 0.3s ease;
-    }
-
-    .skill-badge:hover:nth-child(4n+1) { background: var(--hover1); color: #000; box-shadow: 0 0 15px var(--hover1); }
-    .skill-badge:hover:nth-child(4n+2) { background: var(--hover2); color: #000; box-shadow: 0 0 15px var(--hover2); }
-    .skill-badge:hover:nth-child(4n+3) { background: var(--hover3); color: #000; box-shadow: 0 0 15px var(--hover3); }
-    .skill-badge:hover:nth-child(4n+4) { background: var(--hover4); color: #000; box-shadow: 0 0 15px var(--hover4); }
-
-    .project-grid {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .project-card {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      overflow: hidden;
-      border-radius: 15px;
-      box-shadow: 0 0 20px var(--accent2);
-      transition: 0.3s;
-    }
-
-    .project-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: 0.5s ease;
-    }
-
-    .project-info {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      color: white;
-      opacity: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
-      text-align: center;
-      transition: 0.5s ease;
-    }
-
-    .project-card:hover img {
-      transform: scale(1.1);
-      filter: blur(2px);
-    }
-
-    .project-card:hover .project-info {
-      opacity: 1;
+    .tools img {
+      height: 40px;
     }
 
     form {
-      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     input, textarea {
-      width: 90%;
-      max-width: 400px;
       padding: 10px;
-      border-radius: 8px;
-      border: 2px solid var(--accent);
-      background: #111;
-      color: var(--text-color);
-      font-family: 'Minecraftia', sans-serif;
+      margin: 10px 0;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 500px;
+      border: none;
+      background: #222;
+      color: white;
     }
 
     button {
-      background: var(--accent2);
-      color: black;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: bold;
+      background: var(--accent);
+      color: #000;
+      padding: 10px 30px;
       border: none;
+      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 0 10px var(--accent2);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #888;
+    }
+
+    canvas#bg {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: -1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <div id="loader">
-    <div class="loader-logo">SoulMalik.dev</div>
-    <p id="loading-text">Loading...</p>
-    <div class="progress-bar"><div class="progress" id="progress"></div></div>
-  </div>
+<canvas id="bg"></canvas>
 
-  <canvas id="bg"></canvas>
+<nav>
+  <span class="dark-toggle" onclick="toggleDark()">🌓 Dark Mode</span>
+  <a href="#about">About</a>
+  <a href="#skills">Skills</a>
+  <a href="#projects">Projects</a>
+  <a href="#configs">Configs</a>
+  <a href="#tools">Tools</a>
+  <a href="#additional">Extras</a>
+  <a href="#contact">Contact</a>
+</nav>
 
-  <div class="top-right-buttons">
-    <a href="https://client.maxaranodes.com/" target="_blank">MaxaraNodes</a>
-    <a href="https://www.youtube.com/@SoulMalik69" target="_blank" class="youtube-btn">YouTube</a>
-    <button class="dark-btn" onclick="document.body.classList.toggle('dark')">Dark Mode</button>
-  </div>
+<header>
+  <h1>SoulMalik</h1>
+  <p>Minecraft Server & Plugin Developer • 6+ Years Experience</p>
+</header>
 
-  <div class="container">
-    <h1>SoulMalik</h1>
-    <div class="subtitle">Minecraft Server Developer • 6+ Years Experience</div>
-  </div>
-
-  <div class="section show">
+<section id="about">
+  <div class="card">
     <h2>About Me</h2>
-    <p>🎮 <strong>6 Years of Minecraft Mastery</strong> — from casual survival setups to professional-grade tournament servers.<br><br>💻 <strong>5 Years of Plugin Development</strong> — Skript automation, custom loot, events, dungeons, and performance-focused configs.</p>
+    <p>Built 32+ servers, configured 150+ plugins, spent 2000+ hours improving gameplay and optimizing setups for events, survival, PvP, dungeons, and more.</p>
   </div>
+</section>
 
-  <div class="section show" id="skills">
+<section id="skills">
+  <div class="card">
     <h2>Skills</h2>
-    <div class="skills">
-      <div class="skill-badge">Skript</div>
-      <div class="skill-badge">Paper</div>
-      <div class="skill-badge">Spigot</div>
-      <div class="skill-badge">Multiverse-Core</div>
-      <div class="skill-badge">LuckPerms</div>
-      <div class="skill-badge">DeluxeMenus</div>
-      <div class="skill-badge">EconomyShopGUI</div>
-      <div class="skill-badge">EssentialsX</div>
-      <div class="skill-badge">MythicMobs</div>
-      <div class="skill-badge">Quests</div>
-      <div class="skill-badge">ExcellentCrates</div>
-      <div class="skill-badge">AJLeaderboards</div>
-      <div class="skill-badge">Custom Items</div>
-      <div class="skill-badge">PvPManager</div>
-      <div class="skill-badge">Citizens</div>
-      <div class="skill-badge">Custom Events</div>
+    <div class="skills-grid">
+      <div class="skill">Skript</div>
+      <div class="skill">Spigot</div>
+      <div class="skill">Paper</div>
+      <div class="skill">LuckPerms</div>
+      <div class="skill">Citizens</div>
+      <div class="skill">DeluxeMenus</div>
+      <div class="skill">MythicMobs</div>
+      <div class="skill">AJLeaderboards</div>
+      <div class="skill">ExcellentCrates</div>
+      <div class="skill">Multiverse</div>
     </div>
   </div>
+</section>
 
-  <div class="section show" id="projects">
-    <h2>Latest Projects</h2>
-    <div class="project-grid">
-      <div class="project-card">
+<section id="projects">
+  <div class="card">
+    <h2>Projects</h2>
+    <div class="projects">
+      <div class="project">
         <img src="https://ik.imagekit.io/4e5uou2yov/max.png?updatedAt=1750607285910" alt="Max Tournament">
-        <div class="project-info">
-          <h3>Max Tournament</h3>
-          <p>A Minecraft Battle Royale tournament organized by me and @ReOul. Over 70 players participated within 5 days of announcement.</p>
-        </div>
+        <div class="overlay">Max Tournament — Minecraft BR Tournament hosted with @ReOul. 70+ players joined in 5 days!</div>
       </div>
-      <div class="project-card">
+      <div class="project">
         <img src="https://ik.imagekit.io/4e5uou2yov/max.png?updatedAt=1750607285910" alt="MaxaraMC">
-        <div class="project-info">
-          <h3>MaxaraMC</h3>
-          <p>A Minecraft Network/Server founded by me and @ReOul.</p>
-        </div>
+        <div class="overlay">MaxaraMC — Custom Minecraft Server Network founded by me & @ReOul.</div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="section show" id="contact">
+<section id="configs">
+  <div class="card">
+    <h2>Sample Configs</h2>
+    <ul>
+      <li>📦 DeluxeMenus PvP Panel — <em>[Will be updated soon]</em></li>
+      <li>🧠 MythicMobs Boss Setup — <em>[Will be updated soon]</em></li>
+      <li>🎁 ExcellentCrates Example — <em>[Will be updated soon]</em></li>
+    </ul>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="card">
+    <h2>Tools I Use</h2>
+    <div class="tools">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" title="VS Code" />
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" title="GitHub" />
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" title="Java" />
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg" title="IntelliJ" />
+    </div>
+  </div>
+</section>
+
+<section id="additional">
+  <div class="card">
+    <h2>Additional Stuff</h2>
+    <p>Quick links to partner projects and connections:</p>
+    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+      <a href="https://client.maxaranodes.com/" target="_blank" style="padding: 10px 20px; border-radius: 8px; background: #111; border: 2px solid var(--accent); color: var(--accent); text-decoration: none; font-weight: bold;">🌐 MaxaraNodes Panel</a>
+      <a href="https://discord.gg/XqnxGyy8Eq" target="_blank" style="padding: 10px 20px; border-radius: 8px; background: #5865F2; color: white; text-decoration: none; font-weight: bold;">💬 Join Our Discord</a>
+    </div>
+    <p style="margin-top: 20px;">Shoutout to my partner: <strong>@ReOul</strong> (Discord ID: <code>1182192605589667920</code>)</p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="card">
     <h2>Contact Me</h2>
-    <p>Email me at: <strong>asjidmalik51@gmail.com</strong></p>
     <form action="https://formsubmit.co/asjidmalik51@gmail.com" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required><br><br>
-      <input type="email" name="email" placeholder="Your Email" required><br><br>
-      <textarea name="message" rows="5" placeholder="Your Message" required></textarea><br><br>
+      <input type="text" name="name" placeholder="Your name" required>
+      <input type="email" name="email" placeholder="Your email" required>
+      <textarea name="message" rows="5" placeholder="Your message..." required></textarea>
       <button type="submit">Send Message</button>
     </form>
+    <p style="margin-top: 15px;">or email: <strong>asjidmalik51@gmail.com</strong></p>
   </div>
+</section>
 
-  <script>
-    const messages = [
-      "Loading Chunks…", "Spawning Mobs…", "Building Terrain…",
-      "Locating Stronghold…", "Enchanting Tools…", "Rendering Skybox…"
-    ];
-    document.getElementById("loading-text").innerText =
-      messages[Math.floor(Math.random() * messages.length)];
+<footer>
+  &copy; 2025 SoulMalik | All rights reserved
+</footer>
 
-    setTimeout(() => {
-      document.getElementById("progress").style.width = "100%";
-    }, 100);
+<script>
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+  }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const loader = document.getElementById("loader");
-      if (sessionStorage.getItem("loadedBefore")) {
-        loader.style.display = "none";
-      } else {
-        const start = Date.now();
-        window.addEventListener("load", () => {
-          const elapsed = Date.now() - start;
-          const delay = Math.max(2500 - elapsed, 0);
-          setTimeout(() => {
-            loader.style.display = "none";
-            sessionStorage.setItem("loadedBefore", "true");
-          }, delay);
-        });
-      }
+  // Particle Background
+  const canvas = document.getElementById("bg");
+  const ctx = canvas.getContext("2d");
+  let w, h, particles = [];
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.size = Math.random() * 2;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0,255,255,0.4)";
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
     });
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
 
-    const canvas = document.getElementById("bg");
-    const ctx = canvas.getContext("2d");
-    let w, h, particles = [];
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
-    class Particle {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = Math.random() * w;
-        this.y = Math.random() * h;
-        this.vx = (Math.random() - 0.5) * 1.5;
-        this.vy = (Math.random() - 0.5) * 1.5;
-        this.size = Math.random() * 2 + 0.5;
-        this.color = "rgba(0,255,255,0.5)";
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-      }
-      update(mouse) {
-        const dx = this.x - mouse.x, dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 100) {
-          this.vx += dx / dist * 0.05;
-          this.vy += dy / dist * 0.05;
-        }
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
-        this.vx *= 0.95; this.vy *= 0.95;
-        this.draw();
-      }
-    }
-
-    const mouse = { x: w / 2, y: h / 2 };
-    window.addEventListener("mousemove", e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-
-    for (let i = 0; i < 250; i++) particles.push(new Particle());
-
-    function animate() {
-      ctx.clearRect(0, 0, w, h);
-      particles.forEach(p => p.update(mouse));
-      requestAnimationFrame(animate);
-    }
-    animate();
-  </script>
 </body>
 </html>
